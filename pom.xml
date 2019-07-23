@@ -1,11 +1,14 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>com.cavetale.itemmarker</groupId>
   <artifactId>itemmarker</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
+
   <name>ItemMarker</name>
-  <url>https://cavetale.com</url>
+  <url>https://github.com/StarTux/ItemMarker</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -35,32 +38,34 @@
     </plugins>
   </build>
   <repositories>
-    <!-- Spigot Repo -->
-    <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
+
   </repositories>
   <dependencies>
-    <!-- Spigot-API -->
+
+    <!-- Paper -->
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.13.1-R0.1-SNAPSHOT</version>
+      <groupId>com.destroystokyo.paper</groupId>
+      <artifactId>paper</artifactId>
+      <version>1.14.4-R0.1-SNAPSHOT</version>
+      <optional>true</optional>
     </dependency>
+
     <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.2</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
+
     <!-- Dirty -->
     <dependency>
       <groupId>com.cavetale.dirty</groupId>
       <artifactId>dirty</artifactId>
       <version>0.1-SNAPSHOT</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
+
   </dependencies>
 </project>
