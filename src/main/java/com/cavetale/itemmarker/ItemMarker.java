@@ -3,6 +3,7 @@ package com.cavetale.itemmarker;
 import com.cavetale.dirty.Dirty;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 
 public final class ItemMarker {
@@ -12,54 +13,62 @@ public final class ItemMarker {
 
     // --- Marker methods
 
-    public static ItemStack setMarker(ItemStack item, String key, Object value) {
+    public static ItemStack setMarker(@NonNull ItemStack item,
+                                      @NonNull String key,
+                                      @NonNull Object value) {
         item = Dirty.toCraftItemStack(item);
         Optional<Object> tag = Dirty.accessItemNBT(item, true);
         Dirty.setNBT(tag, key, value);
         return item;
     }
 
-    public static Object getMarker(ItemStack item, String key) {
+    public static <T> Optional<T> getMarker(@NonNull ItemStack item,
+                                            @NonNull String key,
+                                            @NonNull Class<T> clazz) {
         Optional<Object> tag = Dirty.accessItemNBT(item, false);
-        if (!tag.isPresent()) return null;
+        if (!tag.isPresent()) return Optional.empty();
         tag = Dirty.getNBT(tag, key);
-        return Dirty.fromNBT(tag);
+        Object result = Dirty.fromNBT(tag);
+        if (!clazz.isInstance(result)) return Optional.empty();
+        return Optional.of(clazz.cast(result));
     }
 
     // --- Custom ID methods
 
-    public static ItemStack setCustomId(ItemStack item, String customId) {
+    public static ItemStack setCustomId(@NonNull ItemStack item,
+                                        @NonNull String customId) {
         return setMarker(item, ITEM_ID_KEY, customId);
     }
 
-    public static String getCustomId(ItemStack item) {
-        Object result = getMarker(item, ITEM_ID_KEY);
-        if (result == null) return null;
-        if (result instanceof String) return (String)result;
-        return null;
+    public static Optional<String> getCustomId(@NonNull ItemStack item) {
+        return getMarker(item, ITEM_ID_KEY, String.class);
     }
 
-    public static boolean hasCustomId(ItemStack item, String customId) {
-        return customId.equals(getMarker(item, ITEM_ID_KEY));
+    public static boolean hasCustomId(@NonNull ItemStack item,
+                                      @NonNull String customId) {
+        return customId.equals(getCustomId(item).orElse(null));
     }
 
     // --- Owner marker
 
-    public static ItemStack setOwner(ItemStack item, UUID owner) {
+    public static ItemStack setOwner(@NonNull ItemStack item,
+                                     @NonNull UUID owner) {
         return setMarker(item, ITEM_OWNER_KEY, owner.toString());
     }
 
-    public static UUID getOwner(ItemStack item) {
-        Object val = getMarker(item, ITEM_OWNER_KEY);
-        if (val == null || !(val instanceof String)) return null;
+    public static Optional<UUID> getOwner(@NonNull ItemStack item) {
+        String val = getMarker(item, ITEM_OWNER_KEY, String.class)
+            .orElse(null);
+        if (val == null) return Optional.empty();
         try {
-            return UUID.fromString((String)val);
+            return Optional.of(UUID.fromString(val));
         } catch (IllegalArgumentException iae) {
-            return null;
+            return Optional.empty();
         }
     }
 
-    public static boolean isOwner(ItemStack item, UUID owner) {
-        return owner.equals(getOwner(item));
+    public static boolean isOwner(@NonNull ItemStack item,
+                                  @NonNull UUID owner) {
+        return owner.equals(getOwner(item).orElse(null));
     }
 }
