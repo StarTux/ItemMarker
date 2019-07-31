@@ -2,7 +2,7 @@ main: com.cavetale.itemmarker.ItemMarkerPlugin
 name: ItemMarker
 version: 0.1
 api-version: 1.13
-description: ItemMarker
+description: Mark items with hidden tags.
 author: StarTux
 website: https://cavetale.com
 commands:
