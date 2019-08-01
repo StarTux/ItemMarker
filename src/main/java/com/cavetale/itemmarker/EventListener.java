@@ -36,6 +36,7 @@ final class EventListener implements Listener {
     void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK
             && event.getAction() != Action.RIGHT_CLICK_AIR) return;
+        if (!event.hasItem()) return;
         onRightClick(event.getPlayer(), event.getItem(),
                      event.getHand(), event);
     }
